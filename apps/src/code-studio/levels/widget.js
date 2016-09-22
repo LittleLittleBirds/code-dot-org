@@ -3,18 +3,17 @@
  */
 /* global apps, appOptions, dashboard */
 import $ from 'jquery';
-var _ = require('lodash');
+import { registerGetResult } from './codeStudioLevels';
+import _ from 'lodash';
 
 function setupWidgetLevel() {
   window.script_path = location.pathname;
   apps.setupApp(appOptions);
   appOptions.showInstructionsWrapper(dashboard.dialog.showInstructionsDialog);
-  window.getResult = function () {
-    return {
-      response: 'ok',
-      result: true
-    };
-  };
+  registerGetResult(() => ({
+    response: 'ok',
+    result: true
+  }));
   window.options = appOptions.level;
 }
 
