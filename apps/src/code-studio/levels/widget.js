@@ -10,10 +10,7 @@ function setupWidgetLevel() {
   window.script_path = location.pathname;
   apps.setupApp(appOptions);
   appOptions.showInstructionsWrapper(dashboard.dialog.showInstructionsDialog);
-  registerGetResult(() => ({
-    response: 'ok',
-    result: true
-  }));
+  registerGetResult();
   window.options = appOptions.level;
 }
 
