@@ -65,10 +65,9 @@ window.initLevelGroup = function (
   }
 
   var throttledSaveAnswers = throttle(
-    saveAnswers.bind(this, null, submitSublevelResults), 20 * 1000, {
-      leading: true,
-      trailing: true
-    });
+    subLevelId => {
+      submitSublevelResults(saveAnswers, subLevelId);
+    }, 20 * 1000);
 
   var lastResponse = window.getResult().response;
 
@@ -78,9 +77,7 @@ window.initLevelGroup = function (
       return;
     }
     var currentResponse = window.getResult().response;
-    if (lastResponse !== currentResponse) {
-      throttledSaveAnswers(levelId);
-    }
+    throttledSaveAnswers(levelId);
     lastResponse = currentResponse;
   };
 
@@ -139,10 +136,8 @@ window.initLevelGroup = function (
       // Submit what we have, and when that's done, go to the next page of the
       // long assessment.  Cancel any pending throttled attempts at saving state.
       throttledSaveAnswers.cancel();
-      saveAnswers(function () {
-            changePage(targetPage);
-          },
-          submitSublevelResults);
+      const afterSave = () => changePage(targetPage);
+      submitSublevelResults(() => saveAnswers(afterSave));
     }
   }
 
